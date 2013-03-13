@@ -1,0 +1,110 @@
+.noselect {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
+body {
+  background-color: #fafafa;
+  font-family: 'Helvetica Light', Helvetica;
+  font-weight: lighter;
+  overflow: hidden;
+  color: #646464;
+  background-color: #fafafa;
+  margin: 0;
+}
+#langcanvas {
+  padding: 0px;
+  margin: 0px auto;
+}
+.button {
+  color: #594f4f;
+  font-family: monospace;
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0px;
+  text-align: center;
+  display: inline;
+  opacity: .8;
+  padding: 3px;
+  -webkit-backface-visibility: hidden;
+  /* Prevents flickering */
+
+  -webkit-transition: all 0.15s ease-in-out;
+  -moz-transition: all 0.15s ease-in-out;
+  -o-transition: all 0.15s ease-in-out;
+  -ms-transition: all 0.15s ease-in-out;
+}
+.menubutton {
+  padding-right: 20px;
+}
+.button i {
+  color: #3c3c3c;
+  font-size: 70px;
+}
+.button:hover {
+  opacity: 1;
+}
+.canv {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  /* mobile webkit */
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fafafa;
+}
+.start {
+  position: absolute;
+  top: 10px;
+  width: 80%;
+  left: 50%;
+  margin-left: -40%;
+  padding: 5px;
+}
+.start_option {
+  font-size: 70px;
+  text-align: center;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 20px;
+  margin: 20px;
+  max-width: 700px;
+  border-style: solid;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 10px solid #50c76c;
+}
+.start_option:active {
+  border-bottom: none;
+  margin-top: 30px;
+}
+.lobby_name {
+  font-size: 70px;
+  text-align: center;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 20px;
+  margin: 20px;
+  max-width: 700px;
+}
+.lobby_players {
+  font-size: 200px;
+  text-align: center;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 20px;
+  margin: 20px;
+  max-width: 700px;
+}
+.title_start {
+  font-size: 100px;
+  text-align: center;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 20px;
+  margin: 20px;
+  max-width: 700px;
+}
