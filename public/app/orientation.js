@@ -2,7 +2,7 @@
 var tiltLR, tiltFB, dir, motUD;
 
 if (window.DeviceOrientationEvent) {
-  console.log("DeviceOrientation");
+  //console.log("DeviceOrientation");
   // Listen for the deviceorientation event and handle the raw data
   window.addEventListener('deviceorientation', function(eventData) {
     // gamma is the left-to-right tilt in degrees, where right is positive
@@ -15,7 +15,7 @@ if (window.DeviceOrientationEvent) {
     motUD = null;
   }, false);
 } else if (window.OrientationEvent) {
-  console.log("OrientationEvent");
+  //console.log("OrientationEvent");
   window.addEventListener('MozOrientation', function(eventData) {
     // x is the left-to-right tilt from -1 to +1, so we need to convert to degrees
     tiltLR = eventData.x * 90;

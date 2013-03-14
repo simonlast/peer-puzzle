@@ -11,51 +11,47 @@ Controller.templates = {
 
 Controller.name = 'default';
 Controller.isMaster = false;
-Controller.playerData = [];
-
-var bindTouch = function(el, callback){
-    if(iOS){
-        el.bind('touchstart', function(e){
-            e.stopPropagation();
-            callback(e);
-        });
-    }else{
-        el.click(function(e){
-            callback(e);
-        });
-    }
-    
-};
+Controller.playerData = null;
+Controller.wins = 0;
 
 Controller.startCanvas = function(){
     //init
+    $('.canv').remove();
+    $('.start').remove();
     $('body').append(Controller.templates['canvas']);
     canvas = document.getElementById("playcanvas");
     pjs = new Processing(canvas, play);
 
 };
 
-Controller.startLobby = function(name){
+Controller.win = function(){
+    pjs.exit();
+    pjs = null;
+    Controller.wins++;
+    Controller.startLobby(Controller.name, {'name':Controller.name,
+        'players':Controller.playerData.length,
+        'start':'play again'});
+}
+
+
+Controller.startLobby = function(name, ctx){
     Controller.name = name;
     Comm.createGame(name);
 
     var template = Handlebars.compile(Controller.templates['lobby']);
-    var context = {'name':name, 'players':1, 'start':'waiting'};
-    if(Controller.isMaster){
-        context['start'] = 'start';
-    }
-    var html = template(context);
-    $('body').append(html);
+    console.log(ctx);
+    if(!ctx)
+        ctx = {'name':name, 'players':1, 'start':'start'};
     
-    if(Controller.isMaster){
-         $('.startgame').click(function(){
-            $('.start').remove();
+    var html = template(ctx);
+
+    $('body').append(html);
+    $('.startgame').click(function(){
+        if(Controller.isMaster && Controller.playerData){
             Comm.signalStart();
-            Controller.startCanvas();
-        });       
-    }
-
-
+            Controller.startCanvas();   
+        }
+    });       
 };
 
 Controller.init = function(){
@@ -64,21 +60,18 @@ Controller.init = function(){
         var name = window.prompt("what's your name?");
         if(name){
             $('.start').remove();
-            Controller.isMaster = true;
+            //Controller.isMaster = true;
             Controller.startLobby(name);
         }
-    });
-    $('.joingame').click(function(e){
-        var name = window.prompt("what's the name of the game?");
-        if(name){
-            $('.start').remove();
-            Controller.startLobby(name);
-        }
-
     });
 };
 
 Controller.init();
+
+/*window.onerror = function(msg, url, linenumber) {
+    alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+    return true;
+}*/
 
 if (!Array.prototype.filter)
 {

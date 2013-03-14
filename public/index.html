@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Maze</title>
+    <title>Peer Puzzle</title>
     <!-- Viewport (iPhone 5 friendly) <meta name="viewport" content="initial-scale=1.0"> -->
     <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=no"/>
 
@@ -21,21 +21,22 @@
     <meta name="apple-mobile-web-app-title" content="Lab">
 
     <!-- Bounces -->
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
       document.ontouchmove = function(e) {e.preventDefault()};
-    </script>
+    </script>-->
 
     <link type="text/css" rel="stylesheet" href="style.css"/>
     <link rel="shortcut icon" href="http://www.gravatar.com/avatar/3b964d84fcfbcdf59089c8bd7309f0b7.ico" />
-    <link rel="stylesheet" href="/assets/font-awesome.css">
+    <!--<link rel="stylesheet" href="/assets/font-awesome.css">-->
+    <link rel="stylesheet" href="/assets/animate.css">
   </head>
   <body>
 
 
     <div class="start">
-        <div class="title_start">peer puzzle</div>
-        <div class="start_option newgame">start a new game</div>
-        <div class="start_option joingame">join a game</div>
+        <div class="animated bounceIn title_start">peer puzzle</div>
+        <div class="animated bounceIn start_option newgame">join or start a new game</div>
+        <!--<div class="start_option joingame">join a game</div>-->
     </div>
 
 
@@ -54,13 +55,19 @@
 
     <script id="lobby-template" type="text/x-handlebars-template">
         <div class="start">
-            <div class="lobby_name">{{name}}</div>
-            <div class="lobby_players"><div class="desc">friends</div>{{players}}</div>
-            <div class="start_option startgame">{{start}}</div>
+            <div class="animated bounceIn lobby_name">{{name}}</div>
+            <div class="animated bounceIn lobby_players">{{players}}</div>
+            <div class="animated bounceIn start_option startgame inactive">{{start}}</div>
         </div>
     </script>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/assets/fastclick.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            new FastClick(document.body);
+        }, false);
+    </script>
     <script type="text/javascript" src="/assets/processing.js"></script>
     <script type="text/javascript" src="/assets/handlebars.js"></script>
     <script type="text/javascript" src="/app/orientation.js"></script>

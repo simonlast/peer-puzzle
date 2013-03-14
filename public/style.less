@@ -22,6 +22,13 @@
    -webkit-user-select: none;
 }
 
+.delay(@t: .5s){
+	-webkit-animation-delay: @t;
+	-moz-animation-delay: @t;
+	-ms-animation-delay: @t;
+	-o-animation-delay: @t;
+}
+
 .rotate(@deg: 180deg){
     -moz-transform:rotate(@deg);
 	-webkit-transform:rotate(@deg);
@@ -103,11 +110,12 @@ body{
 
 .start{
 	position: absolute;
-	top:10px;
-	width: 80%;
+	top:10%;
+	width: 90%;
 	left:50%;
-	margin-left: -40%;
+	margin-left: -45%;
 	padding: 5px;
+	.noselect;
 }
 
 .start_option{
@@ -123,6 +131,7 @@ body{
 	border-right:none;
 	border-left:none;
 	border-bottom:10px solid darken(@bkg2, 20%);
+	.delay(.1s);
 }
 
 .start_option:active{
@@ -138,6 +147,7 @@ body{
 	padding: 20px;
 	margin:20px;
 	max-width: 700px;
+	.delay(0s);
 }
 
 .lobby_players{
@@ -148,6 +158,7 @@ body{
 	padding: 20px;
 	margin:20px;
 	max-width: 700px;
+	.delay(.1s);
 }
 
 .title_start{
@@ -158,6 +169,15 @@ body{
 	padding: 20px;
 	margin:20px;
 	max-width: 700px;	
+}
+
+.startgame{
+	.delay(.2s);
+}
+
+.inactive{
+	background-color: desaturate(@bkg2, 25%);
+	border-bottom:10px solid darken(desaturate(@bkg2, 20%), 25%);
 }
 
 

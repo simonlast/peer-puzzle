@@ -23,7 +23,8 @@ var play = function(pjs) {
 	//time between exchanges
 	var minTime = 1000;
 
-	var pixelsPerBox = 100;
+	var pixelsPerBox = 80;
+	var minPixelsPerBox = 30;
 
 	var mazePG;
 	var img;
@@ -46,8 +47,8 @@ var play = function(pjs) {
 	};
 
 	pjs.draw = function(){
+		pjs.image(img, 0, 0);
 		if(ballHere){
-			pjs.image(img, 0, 0);
 			for(var i=0; i<exits.length; i++){
 				exits[i].tick();
 			}
@@ -74,6 +75,12 @@ var play = function(pjs) {
 	};
 
 	var allSetup = function(){
+
+		pixelsPerBox -= 10*Controller.wins;
+		if(pixelsPerBox < minPixelsPerBox){
+			pixelsPerBox = minPixelsPerBox;
+		}
+
 		cols = Math.floor(pjs.width/pixelsPerBox);
 		rows = Math.floor(pjs.height/pixelsPerBox);
 		padding = pjs.width*(pjs.height/pjs.width)/100;
@@ -88,38 +95,55 @@ var play = function(pjs) {
 
 		exits = [];
 
-		EXITS = exits;
-
 		//connect to next player and prev player
 		var others = Controller.playerData.others;
-		for(var i=0; i<others.length; i++){
-			var curr = others[i];
-			if(curr.id === Comm.id){
-				console.log(Comm.id + ", " + i);
-				if(i-1 >= 0){
-					var prev = randomExit(others[i-1].id)
+		if(others.length > 1){
+			for(var i=0; i<others.length; i++){
+				var curr = others[i];
+				//find curr
+				if(curr.id === Comm.id){
+					//console.log(Comm.id + ", " + i);
+					var prevI = i-1;
+					if(prevI < 0){
+						prevI = others.length-1;
+					}
+
+
+					var prev = randomExit(others[prevI].id)
 					console.log(prev);
 					exits.push(prev);
-				}
-				if(i+1 < others.length){
-					var next = randomExit(others[i+1].id);
-					console.log(next);
-					exits.push(next);
+
+					if(others.length > 2){
+						var nextI = i+1;
+						if(nextI >= others.length){
+							nextI = 0;
+						}
+						
+						var next = randomExit(others[nextI].id);
+						console.log(next);
+						exits.push(next);			
+					}
+
 				}
 			}
+		}
+
+
+		//if last, make end
+		if(Comm.id === others[others.length-1].id){
+			end = maze[Math.floor(pjs.random(1,maze[0].length-3))][Math.floor(pjs.random(1,maze[0].length-3))]
 		}
 
 		makeRenderable();
 	}
 
 	var masterSetup = function(){
-
 		ballHere = true;
-		
 	};
 
 	var peerSetup = function(){
 		start = null;
+		pjs.noLoop();
 	}
 
 	var constructMaze = function(w, h, startX, startY){
@@ -146,22 +170,20 @@ var play = function(pjs) {
 
 	pjs.transfer = function(id){
 		console.log("transfer");
-		var others = Controller.playerData.others;
-		for(var i=0; i<others.length; i++){
-			var curr = others[i];
-			if(curr.id === Comm.id){
-				if(i == 0 || i == others.length-1){
-					exits[0].addBall();
-				}
-				else{
-					if(exits[0].otherPlayerId === id){
-						exits[0].addBall();
-					}else{
-						exits[1].addBall();
-					}
-				}
+		for(var i=0; i<exits.length; i++){
+			var curr = exits[i];
+			if(curr.otherPlayerId === id){
+				curr.addBall();
+				return;
 			}
 		}
+	}
+
+	var win = function(){
+		console.log("win!");
+		pjs.noLoop();
+		Controller.win();
+		Comm.notifyWin();
 	}
 
 	var MazeBlock = function(x, y){
@@ -283,32 +305,40 @@ var play = function(pjs) {
 	};
 
 	var randomExit = function(id){
-		var x, y;
+		var x, y, mazeX, mazeY;
 		do{
 			var side = Math.floor(pjs.random(0, 4));
 			if(side == 0){ //left
 				x = -1;
 				y = Math.floor(pjs.random(maze[0].length));
+				mazeX = 0;
+				mazeY = y;
 			}else if(side == 1){ //top
-				x = Math.floor(pjs.random(maze[0].length));
+				x = Math.floor(pjs.random(maze.length));
 				y = -1;
+				mazeX = x;
+				mazeY = 0;
 			}else if(side == 2){ //right
 				x = maze.length;
 				y = Math.floor(pjs.random(maze[0].length));
+				mazeX = x-1;
+				mazeY = y;
 			}else{ //bottom
-				x = Math.floor(pjs.random(maze[0].length));
+				x = Math.floor(pjs.random(maze.length));
 				y = maze[0].length;
+				mazeX = x;
+				mazeY = y-1;
+				//console.log(x + "," + y);
+				//console.log(mazeX + "," + mazeY);
 			}
-		}while(!isUniqueExit(x, y))
-
-		console.log(x + "," + y);
+		}while(!isUniqueExit(x, y))// || (maze[mazeX][mazeY].neighbors.length == 0))
 
 		return new Exit(x, y, id)
 	};
 
 	var isUniqueExit = function(x, y){
 		for(var i=0; i<exits.length; i++){
-			if(exits[i].block.x == x && exits[i].block.y == y){
+			if(Math.abs(exits[i].block.x - x) <= 1 || Math.abs(exits[i].block.y - y) <= 1){
 				return false;
 			}
 		}
@@ -331,6 +361,7 @@ var play = function(pjs) {
 			this.adjacentBlock = maze[x][y-1];
 			this.startV = new pjs.PVector(0, 5);
 		}
+		
 		this.adjacentBlock.neighbors.push(this.block);
 		this.block.neighbors.push(this.adjacentBlock);
 
@@ -353,9 +384,9 @@ var play = function(pjs) {
 			if(now - this.lastTransfered > minTime){
 				ballHere = false;
 				Comm.transferBall(this.otherPlayerId);
+				pjs.noLoop();
 			}
-			
-		}
+		};
 
 		this.addBall = function(){
 			this.lastTransfered = (new Date()).getTime();
@@ -367,7 +398,8 @@ var play = function(pjs) {
 			ball.currBlock = this.block;
 			ball.pos.add(this.startV);
 			ball.v = new pjs.PVector(this.startV.x, this.startV.y);
-		}
+			pjs.loop();
+		};
 
 	};
 
@@ -420,9 +452,9 @@ var play = function(pjs) {
 			this.currBlock = minBlock;
 
 			//WIN
-			/*if(this.currBlock == end){
-				pjs.setup();
-			}*/
+			if(this.currBlock == end){
+				win();
+			}
 		}
 
 		//sets current block and collides with it and neighbors
@@ -477,7 +509,7 @@ var play = function(pjs) {
 				this.boundYBottom(x,y,w,h);
 			}
 
-			var multiplier = padding/10;
+			var multiplier = padding/5;
 
 			//bound on corners
 			if(bottom && right){

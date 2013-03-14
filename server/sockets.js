@@ -29,12 +29,22 @@ var connect = function(socket){
 		updateSockets(room);
 	});
 
+	socket.on('request', function(data){
+
+	});
+
 	socket.on('start', function(data){
 		io.sockets.in(socket.room).emit('start', '');
 	});
 
+	socket.on('notifyWin', function(data){
+		console.log("win");
+		io.sockets.in(socket.room).emit('notifyWin', '');
+	});
+
 	socket.on('transfer', function(data){
 		var other = io.sockets.sockets[data.id];
+		console.log(other.id);
 		other.emit('transfer', {from: socket.id});
 	});
 
