@@ -51,6 +51,12 @@
     -ms-transition: all @time ease-in-out;
 }
 
+.box(@col:#000000, @h: 10px){
+	-webkit-box-shadow: 0 @h 0 @col;
+	-moz-box-shadow: 0 @h 0 @col;
+	box-shadow: 0 @h 0 @col;
+}
+
 body{
 	background-color:@bkg;
 	font-family:'Helvetica Light', Helvetica;
@@ -126,16 +132,13 @@ body{
 	padding: 20px;
 	margin:20px;
 	max-width: 700px;
-	border-style:solid;
-	border-top:none;
-	border-right:none;
-	border-left:none;
-	border-bottom:10px solid darken(@bkg2, 20%);
+	.rounded-corners;
+	.box(darken(@bkg2, 20%), 10px);
 	.delay(.1s);
 }
 
 .start_option:active{
-	border-bottom:none;
+	.box(darken(@bkg2, 20%), 0px);
 	margin-top: 30px;
 }
 
@@ -148,6 +151,7 @@ body{
 	margin:20px;
 	max-width: 700px;
 	.delay(0s);
+	.rounded-corners;
 }
 
 .lobby_players{
@@ -159,16 +163,18 @@ body{
 	margin:20px;
 	max-width: 700px;
 	.delay(.1s);
+	.rounded-corners;
 }
 
 .title_start{
-	font-size:100px;
+	font-size:130px;
 	text-align:center;
 	background-color: @bkg2;
 	color: @textcol;
 	padding: 20px;
 	margin:20px;
-	max-width: 700px;	
+	max-width: 700px;
+	.rounded-corners;	
 }
 
 .startgame{
