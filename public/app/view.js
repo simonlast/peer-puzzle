@@ -24,7 +24,7 @@ var play = function(pjs) {
 	var minTime = 1000;
 
 	var pixelsPerBox = 140;
-	var minPixelsPerBox = 30;
+	var minPixelsPerBox = 50;
 
 	var mazePG;
 	var img;
@@ -76,6 +76,9 @@ var play = function(pjs) {
 
 	var allSetup = function(){
 
+		//have 8 across by default
+		pixelsPerBox = pjs.width/8;
+
 		pixelsPerBox -= 10*Controller.wins;
 		if(pixelsPerBox < minPixelsPerBox){
 			pixelsPerBox = minPixelsPerBox;
@@ -116,7 +119,33 @@ var play = function(pjs) {
 						var next = randomExit(others[nextI].id);
 						console.log(next);
 						exits.push(next);
+					}
+
+					//set up third exit
+					if(others.length > 3){
+						if(others.length % 2 == 0){ //even
+							var half = others.length/2;
+							var num = half + i;
+							if(num >= others.length){
+								num = num - others.length;
+							}
+							//console.log('num: ' + num);
+							var next = randomExit(others[num].id);
+							exits.push(next);
+						}else if(i != others.length-1){ //odd, but not last player
+							var half = Math.floor(others.length/2);
+							var num = half;
+							num += i;
+							if(num >= others.length-1){
+								num = num - (others.length-1);
+							}
+							//console.log('num: ' + num);
+							var next = randomExit(others[num].id);
+							exits.push(next);
+						}
 					}	
+
+					break;
 
 				}
 			}
