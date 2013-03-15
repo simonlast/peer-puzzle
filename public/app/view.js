@@ -23,7 +23,7 @@ var play = function(pjs) {
 	//time between exchanges
 	var minTime = 1000;
 
-	var pixelsPerBox = 80;
+	var pixelsPerBox = 140;
 	var minPixelsPerBox = 30;
 
 	var mazePG;
@@ -104,25 +104,19 @@ var play = function(pjs) {
 				if(curr.id === Comm.id){
 					//console.log(Comm.id + ", " + i);
 					var prevI = i-1;
-					if(prevI < 0){
-						prevI = others.length-1;
+					if(prevI >= 0){
+						//prevI = others.length-1;
+						var prev = randomExit(others[prevI].id)
+						console.log(prev);
+						exits.push(prev);
 					}
 
-
-					var prev = randomExit(others[prevI].id)
-					console.log(prev);
-					exits.push(prev);
-
-					if(others.length > 2){
-						var nextI = i+1;
-						if(nextI >= others.length){
-							nextI = 0;
-						}
-						
+					var nextI = i+1;
+					if(nextI < others.length){
 						var next = randomExit(others[nextI].id);
 						console.log(next);
-						exits.push(next);			
-					}
+						exits.push(next);
+					}	
 
 				}
 			}
@@ -348,18 +342,19 @@ var play = function(pjs) {
 	var Exit = function(x, y, id){
 		this.block = new MazeBlock(x, y);
 		this.lastTransfered = (new Date()).getTime();
+		this.startVMag = padding;
 		if(x < 0){
 			this.adjacentBlock = maze[x+1][y];
-			this.startV = new pjs.PVector(-5, 0);
+			this.startV = new pjs.PVector(-1*this.startVMag, 0);
 		}else if(x >= maze.length){
 			this.adjacentBlock = maze[x-1][y];
-			this.startV = new pjs.PVector(5, 0);
+			this.startV = new pjs.PVector(this.startVMag, 0);
 		}else if(y < 0){
 			this.adjacentBlock = maze[x][y+1];
-			this.startV = new pjs.PVector(0, -5);
+			this.startV = new pjs.PVector(0, -1*this.startVMag);
 		}else{
 			this.adjacentBlock = maze[x][y-1];
-			this.startV = new pjs.PVector(0, 5);
+			this.startV = new pjs.PVector(0, this.startVMag);
 		}
 		
 		this.adjacentBlock.neighbors.push(this.block);
@@ -370,10 +365,10 @@ var play = function(pjs) {
 		this.tick = function(){
 			if(ball.currBlock == this.block){
 				//check to see if ball has left screen
-				if(ball.pos.x - ball.dimen.x > pjs.width ||
-					ball.pos.x + ball.dimen.x < 0 ||
-					ball.pos.y + ball.dimen.y < 0
-					|| ball.pos.y - ball.dimen.y > pjs.height){
+				if(ball.pos.x - ball.dimen.x/2 > pjs.width ||
+					ball.pos.x + ball.dimen.x/2 < 0 ||
+					ball.pos.y + ball.dimen.y/2 < 0 ||
+					ball.pos.y - ball.dimen.y/2 > pjs.height){
 					this.transfer();
 				}
 			}
@@ -616,18 +611,6 @@ var play = function(pjs) {
 
 			this.pos.add(this.v);
 
-
-			//console.log(this.a.x);
-			//console.log(this.a.y);
-			/*pjs.fill(ballCol, 100);
-			for(var i=0; i<maze.length; i++){
-				var arr = [];
-				for(var j=0; j<maze[0].length; j++){
-					pjs.ellipse(maze[i][j].center.x, maze[i][j].center.y, this.diam, this.diam);
-				}			
-			}*/
-
-			
 			pjs.fill(ballCol);
 			pjs.ellipse(this.pos.x, this.pos.y, this.dimen.x, this.dimen.y);
 		};

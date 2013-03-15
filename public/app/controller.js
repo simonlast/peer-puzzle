@@ -1,8 +1,6 @@
 
 var Controller = {};
 
-var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/i) ? true : false );
-
 Controller.templates = {
     'start': $('#start-template').html(),
     'canvas': $('#canvas-template').html(),

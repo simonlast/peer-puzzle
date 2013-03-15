@@ -44,13 +44,14 @@ var connect = function(socket){
 
 	socket.on('transfer', function(data){
 		var other = io.sockets.sockets[data.id];
-		console.log(other.id);
-		other.emit('transfer', {from: socket.id});
+		if(other){
+			console.log('transfer to: ' + other.id);
+			other.emit('transfer', {from: socket.id});
+		}else{
+			console.log('invalid: ' + data.id);
+		}
+		
 	});
-
-	/*socket.on('disconnect', function(){
-		updateSockets(socket.room);
-	});*/
 }
 
 
