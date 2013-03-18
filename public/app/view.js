@@ -24,7 +24,7 @@ var play = function(pjs) {
 	var minTime = 1000;
 
 	var pixelsPerBox = 140;
-	var minPixelsPerBox = 50;
+	var minPixelsPerBox = 80;
 
 	var mazePG;
 	var img;
@@ -79,7 +79,7 @@ var play = function(pjs) {
 		//have 8 across by default
 		pixelsPerBox = pjs.width/8;
 
-		pixelsPerBox -= 10*Controller.wins;
+		pixelsPerBox -= 5*Controller.wins;
 		if(pixelsPerBox < minPixelsPerBox){
 			pixelsPerBox = minPixelsPerBox;
 		}

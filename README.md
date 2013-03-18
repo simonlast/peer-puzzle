@@ -1,4 +1,4 @@
-![Billy](https://raw.github.com/simonlast/peerpuzzle/master/screenshot.png)
+![Billy](https://raw.github.com/simonlast/peer-puzzle/master/screenshot.png)
 
 #Peer Puzzle
 

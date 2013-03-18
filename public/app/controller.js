@@ -39,7 +39,7 @@ Controller.startLobby = function(name, ctx){
     var template = Handlebars.compile(Controller.templates['lobby']);
     console.log(ctx);
     if(!ctx)
-        ctx = {'name':name, 'players':1, 'start':'start'};
+        ctx = {'name':name, 'players':'loading', 'start':'start'};
     
     var html = template(ctx);
 

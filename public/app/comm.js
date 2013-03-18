@@ -36,7 +36,6 @@ Comm.socket.on('start', function(data){
 
 Comm.socket.on('notifyWin', function(data){
 	console.log("WIN!!");
-	//Controller.isMaster = false;
 	if(pjs){
 		Controller.win();
 	}
@@ -44,7 +43,6 @@ Comm.socket.on('notifyWin', function(data){
 
 Comm.socket.on('update_room', function(data){
 	$('.lobby_players').html(data.num);
-	//$('.lobby_players').addClass('swing');
 	Comm.id = Comm.socket.socket.sessionid;
 	Controller.playerData = data;
 	if(Comm.id === Controller.playerData.others[0].id){
