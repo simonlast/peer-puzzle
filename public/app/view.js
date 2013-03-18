@@ -14,7 +14,7 @@ var play = function(pjs) {
 	var end;
 	var mazeDimen;
 	var padding;
-	var maxAccel = 10;
+	var maxAccel = 20;
 
 	var exits;
 	var players;
@@ -154,7 +154,9 @@ var play = function(pjs) {
 
 		//if last, make end
 		if(Comm.id === others[others.length-1].id){
-			end = maze[Math.floor(pjs.random(1,maze[0].length-3))][Math.floor(pjs.random(1,maze[0].length-3))]
+			var x = Math.floor(pjs.random(1,maze.length-2));
+			var y = Math.floor(pjs.random(1,maze[0].length-2));
+			end = maze[x][y];
 		}
 
 		makeRenderable();
@@ -308,10 +310,6 @@ var play = function(pjs) {
 			}else{
 				mazePG.rect(avX, avY + padding, mazeDimen.x, mazeDimen.y-padding*2)
 			}
-
-			//pjs.fill(240,0,0);
-			//pjs.rect(avX + padding, avY + padding, mazeDimen.x-padding*2, mazeDimen.y-padding*2);
-			
 		}
 
 		//recursively render maze
@@ -450,8 +448,8 @@ var play = function(pjs) {
 		}
 
 		this.friction = function(){
-			this.v.x *= .6;
-			this.v.y *= .6;
+			this.v.x *= .9;
+			this.v.y *= .9;
 		};
 
 		this.findBlock = function(){
@@ -508,129 +506,129 @@ var play = function(pjs) {
 			this.collide(this.currBlock, left, top, right, bottom);
 		}
 
+		/* Adapted from: http://stackoverflow.com/questions/3120357/get-closest-point-to-a-line */
+		this.closestPoint = function(lineStart, lineEnd, point){
+			var pb = pjs.PVector.sub(point,lineEnd);
+			var ab = pjs.PVector.sub(lineStart,lineEnd);
+			var k_raw = pjs.PVector.dot(pb, ab) / pjs.PVector.dot(ab, ab);
+
+			var k;
+			if(k_raw < 0)
+    			k= 0;
+			else if(k_raw > 1)
+				k= 1;
+			else
+    			k= k_raw;
+
+    		var ret = new pjs.PVector(k*lineStart.x + (1-k)*lineEnd.x, k*lineStart.y + (1-k)*lineEnd.y);
+    		return ret;
+		};
+
+		this.collideLine = function(lineStart, lineEnd){
+			var closest = this.closestPoint(lineStart, lineEnd, this.pos);
+			var dist = pjs.PVector.dist(closest, this.pos);
+			if(dist < this.dimen.x/2){
+				var sub = pjs.PVector.sub(this.pos, closest);
+				sub.normalize();
+				sub.mult(this.dimen.x/2 - dist);
+				this.v.add(sub);
+			}
+		};
+
 		this.collide = function(other, left, top, right, bottom){
 			var x = other.pos.x + padding;
 			var y = other.pos.y + padding;
 			var w = mazeDimen.x-padding*2;
 			var h = mazeDimen.y-padding*2;
 
-			//console.log("left: " + left + "top: " + top + "right: " + right + "bottom" + bottom);
-
+			var topLeft = new pjs.PVector(x, y);
+			var topRight = new pjs.PVector(x+w, y);
+			var bottomLeft = new pjs.PVector(x, y+h);
+			var bottomRight = new pjs.PVector(x+w, y+h);
 
 			if(!left){
-				this.boundXLeft(x,y,w,h);
+				this.collideLine(topLeft, bottomLeft);
 			}
 
 			if(!right){
-				this.boundXRight(x,y,w,h);
+				this.collideLine(topRight, bottomRight)
 			}
 
 			if(!top){
-				this.boundYTop(x,y,w,h);
+				this.collideLine(topLeft, topRight);
 			}
 
 			if(!bottom){
-				this.boundYBottom(x,y,w,h);
+				this.collideLine(bottomRight, bottomLeft);
 			}
 
-			var multiplier = padding/5;
+			//check for collisions against padding
 
-			//bound on corners
-			if(bottom && right){
-				var corner = new pjs.PVector(x+w, y+w);
-				var dist = pjs.PVector.dist(corner, this.pos);
-				if(dist < this.dimen.x/2){
-					var diff = pjs.PVector.sub(this.pos, corner);
-					diff.normalize();
-					diff.mult(multiplier)
-					this.v.add(diff);
-					this.friction();
-				}
+			if(left){
+				var topLeftStart = new pjs.PVector(topLeft.x - padding, topLeft.y);
+				this.collideLine(topLeftStart, topLeft);
+				var bottomLeftStart = new pjs.PVector(bottomLeft.x - padding, bottomLeft.y);
+				this.collideLine(bottomLeftStart, bottomLeft);
 			}
 
-			if(bottom && left){
-				var corner = new pjs.PVector(x, y+w);
-				var dist = pjs.PVector.dist(corner, this.pos);
-				if(dist < this.dimen.x/2){
-					var diff = pjs.PVector.sub(this.pos, corner);
-					diff.normalize();
-					diff.mult(multiplier)
-					this.v.add(diff);
-					this.friction();
-				}
-
+			if(right){
+				var topRightEnd = new pjs.PVector(topRight.x + padding, topRight.y);
+				this.collideLine(topRight, topRightEnd);
+				var bottomRightEnd = new pjs.PVector(bottomRight.x + padding, bottomRight.y);
+				this.collideLine(bottomRight, bottomRightEnd);
 			}
 
-			if(top && right){
-				var corner = new pjs.PVector(x+w, y);
-				var dist = pjs.PVector.dist(corner, this.pos);
-				if(dist < this.dimen.x/2){
-					var diff = pjs.PVector.sub(this.pos, corner);
-					diff.normalize();
-					diff.mult(multiplier)
-					this.v.add(diff);
-					this.friction();
-				}
-
+			if(top){
+				var topLeftEnd = new pjs.PVector(topLeft.x, topLeft.y - padding);
+				this.collideLine(topLeft, topLeftEnd);
+				var topRightEnd = new pjs.PVector(topRight.x, topRight.y - padding);
+				this.collideLine(topRight, topRightEnd);
 			}
 
-			if(top && left){
-				var corner = new pjs.PVector(x, y);
-				var dist = pjs.PVector.dist(corner, this.pos);
-				if(dist < this.dimen.x/2){
-					var diff = pjs.PVector.sub(this.pos, corner);
-					diff.normalize();
-					diff.mult(multiplier)
-					this.v.add(diff);
-					this.friction();
-				}
-
+			if(bottom){
+				var bottomLeftEnd = new pjs.PVector(bottomLeft.x, bottomLeft.y + padding);
+				this.collideLine(bottomLeft, bottomLeftEnd);
+				var bottomRightEnd = new pjs.PVector(bottomRight.x, bottomRight.y + padding);
+				this.collideLine(bottomRight, bottomRightEnd);
 			}
 		};
 
 		this.boundXLeft = function(x, y, w, h){
-			if(this.pos.x - this.dimen.x/2 < x){
-				this.pos.x = x + this.dimen.x/2;
-				this.v.x *= -1;
-				this.a.x = 0;
-				this.friction();
-				return true;
-			}
+			return;
+			this.pos.x = x + this.dimen.x/2;
+			this.v.x *= -1;
+			this.a.x = 0;
+			this.friction();
 		};
 
 		this.boundXRight = function(x,y,w,h){
-			if(this.pos.x + this.dimen.x/2 > x + w){
-				this.pos.x = x + w - this.dimen.x/2;
-				this.v.x *= -1;
-				this.a.x = 0;
-				this.friction();
-				return true;
-			}
+			return;
+			this.pos.x = x + w - this.dimen.x/2;
+			this.v.x *= -1;
+			this.a.x = 0;
+			this.friction();
 		};
 
 		this.boundYTop = function(x, y, w, h){
-			if(this.pos.y - this.dimen.y/2 < y){
-				this.pos.y = y + this.dimen.y/2;
-				this.v.y *= -1;
-				this.a.y = 0;
-				this.friction();
-				return true;
-			}
+			return;
+			this.pos.y = y + this.dimen.y/2;
+			this.v.y *= -1;
+			this.a.y = 0;
+			this.friction();
 		};
 
 		this.boundYBottom = function(x, y, w, h){
-			if(this.pos.y + this.dimen.y/2 > y + h){
-				this.pos.y = y + h - this.dimen.y/2;
-				this.v.y *= -1;
-				this.a.y = 0;
-				this.friction();
-				return true;
-			}
+			return;
+			this.pos.y = y + h - this.dimen.y/2;
+			console.log(this.v.y);
+			this.v.y *= -1;
+			this.a.y = 0;
+			this.friction();
 		};
 
 		this.render = function(){
-			this.a.x = tiltLR/100;
-			this.a.y = tiltFB/100;
+			this.a.x = tiltLR/50;
+			this.a.y = tiltFB/50;
 			
 			this.findBlock();
 			this.collideAll();
@@ -639,6 +637,8 @@ var play = function(pjs) {
 			this.limitVeloc();
 
 			this.pos.add(this.v);
+
+			this.friction();
 
 			pjs.fill(ballCol);
 			pjs.ellipse(this.pos.x, this.pos.y, this.dimen.x, this.dimen.y);
