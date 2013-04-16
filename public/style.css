@@ -7,7 +7,6 @@ body {
   background-color: #fafafa;
   font-family: 'Helvetica Light', Helvetica;
   font-weight: lighter;
-  overflow: hidden;
   color: #646464;
   background-color: #fafafa;
   margin: 0;
@@ -15,6 +14,12 @@ body {
 #langcanvas {
   padding: 0px;
   margin: 0px auto;
+}
+a {
+  text-decoration: none;
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
 }
 .button {
   color: #594f4f;
@@ -62,6 +67,7 @@ body {
   left: 50%;
   margin-left: -45%;
   padding: 5px;
+  padding-bottom: 50px;
   -moz-user-select: -moz-none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -73,6 +79,7 @@ body {
   color: #594f4f;
   padding: 20px;
   margin: 20px;
+  margin-bottom: 30px;
   border-radius: 8px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -89,6 +96,33 @@ body {
   -moz-box-shadow: 0 0px 0 #50c76c;
   box-shadow: 0 0px 0 #50c76c;
   margin-top: 30px;
+  margin-bottom: 0px;
+}
+.start_option2 {
+  font-size: 5em;
+  text-align: center;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 20px;
+  margin: 20px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -webkit-box-shadow: 0 10px 0 #50c76c;
+  -moz-box-shadow: 0 10px 0 #50c76c;
+  box-shadow: 0 10px 0 #50c76c;
+  -webkit-animation-delay: 0.1s;
+  -moz-animation-delay: 0.1s;
+  -ms-animation-delay: 0.1s;
+  -o-animation-delay: 0.1s;
+}
+.start_option2:active {
+  -webkit-box-shadow: 0 0px 0 #50c76c;
+  -moz-box-shadow: 0 0px 0 #50c76c;
+  box-shadow: 0 0px 0 #50c76c;
+  margin-top: 40px;
+  margin-bottom: 0px;
 }
 .lobby_name {
   font-size: 5em;
@@ -96,6 +130,21 @@ body {
   background-color: #9de0ad;
   color: #594f4f;
   padding: 20px;
+  margin: 20px;
+  -webkit-animation-delay: 0s;
+  -moz-animation-delay: 0s;
+  -ms-animation-delay: 0s;
+  -o-animation-delay: 0s;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+.help {
+  font-size: 3em;
+  text-align: left;
+  background-color: #9de0ad;
+  color: #594f4f;
+  padding: 40px;
   margin: 20px;
   -webkit-animation-delay: 0s;
   -moz-animation-delay: 0s;

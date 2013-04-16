@@ -61,7 +61,6 @@ body{
 	background-color:@bkg;
 	font-family:'Helvetica Light', Helvetica;
 	font-weight: lighter;
-	overflow: hidden;
 	color:rgb(100,100,100);
 	background-color:rgb(250,250,250);
 	margin: 0;
@@ -71,6 +70,11 @@ body{
 	padding: 0px;
 	margin: 0px auto;
 
+}
+
+a{
+    text-decoration: none;
+    .noselect;
 }
 
 .button{
@@ -121,6 +125,7 @@ body{
 	left:50%;
 	margin-left: -45%;
 	padding: 5px;
+	padding-bottom: 50px;
 	.noselect;
 }
 
@@ -131,6 +136,7 @@ body{
 	color: @textcol;
 	padding: 20px;
 	margin:20px;
+	margin-bottom: 30px;
 	.rounded-corners;
 	.box(darken(@bkg2, 20%), 10px);
 	.delay(.1s);
@@ -139,6 +145,26 @@ body{
 .start_option:active{
 	.box(darken(@bkg2, 20%), 0px);
 	margin-top: 30px;
+	margin-bottom: 0px;
+}
+
+.start_option2{
+	font-size:5em;
+	text-align:center;
+	background-color: @bkg2;
+	color: @textcol;
+	padding: 20px;
+	margin:20px;
+	margin-bottom: 30px;
+	.rounded-corners;
+	.box(darken(@bkg2, 20%), 10px);
+	.delay(.1s);
+}
+
+.start_option2:active{
+	.box(darken(@bkg2, 20%), 0px);
+	margin-top: 40px;
+	margin-bottom: 0px;
 }
 
 .lobby_name{
@@ -147,6 +173,17 @@ body{
 	background-color: @bkg2;
 	color: @textcol;
 	padding: 20px;
+	margin:20px;
+	.delay(0s);
+	.rounded-corners;
+}
+
+.help{
+	font-size:3em;
+	text-align:left;
+	background-color: @bkg2;
+	color: @textcol;
+	padding: 40px;
 	margin:20px;
 	.delay(0s);
 	.rounded-corners;

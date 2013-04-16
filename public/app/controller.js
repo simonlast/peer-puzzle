@@ -55,7 +55,7 @@ Controller.startLobby = function(name, ctx){
 Controller.init = function(){
 
     $('.newgame').click(function(e){
-        var name = window.prompt("what's your name?");
+        var name = window.prompt("enter a room name");
         if(name){
             $('.start').remove();
             //Controller.isMaster = true;

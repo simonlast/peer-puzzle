@@ -27,7 +27,7 @@
     <!-- Title -->
     <meta name="apple-mobile-web-app-title" content="Lab">
 
-    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <link type="text/css" rel="stylesheet" href="/style.css"/>
     <link rel="shortcut icon" href="http://www.gravatar.com/avatar/3b964d84fcfbcdf59089c8bd7309f0b7.ico" />
     <!--<link rel="stylesheet" href="/assets/font-awesome.css">-->
     <link rel="stylesheet" href="/assets/animate.css">
@@ -37,7 +37,9 @@
 
     <div class="start">
         <div class="animated bounceIn title_start">peer puzzle</div>
-        <div class="animated bounceIn start_option newgame">join or start a game</div>
+        <a href="/help"><div class="animated bounceIn start_option">how to play</div></a>
+        <div class="animated bounceIn start_option2 newgame">join or start a game</div>
+        <div></div>
     </div>
 
 
@@ -48,9 +50,9 @@
 
     <script id="start-template" type="text/x-handlebars-template">
         <div class="start">
-            <div class="title_start">peer puzzle</div>
-            <div class="start_option newgame">start a new game</div>
-            <div class="start_option joingame">join a game</div>
+            <div class="animated bounceIn title_start">peer puzzle</div>
+            <div class="animated bounceIn start_option newgame">join or start a game</div>
+            <a href="/help"><div class="animated bounceIn start_option">how to play</div></a>
         </div>
     </script>
 
