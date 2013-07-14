@@ -22,7 +22,7 @@ var server = http.createServer(app);
 
 var io = sio.listen(server, { log: false });
 
-server.listen(80);
+server.listen(process.argv[2] || 80);
 
 sockets.init(io);
 
